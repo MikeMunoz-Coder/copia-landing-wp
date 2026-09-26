@@ -1,0 +1,8 @@
+/* ==========================================================================
+   Wifi Prado — Hoja Maestra de Estilos
+   Control estricto del orden de la cascada.
+   ========================================================================== */
+
+/* --- 1. Fundamentos y Tokens --- */
+@import "styles/tokens.css";
+@import "styles/reset.css";
