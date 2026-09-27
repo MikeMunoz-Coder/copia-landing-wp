@@ -1,13 +1,13 @@
 /* ==========================================================================
    Wifi Prado — Procedural Background Engine
    Ruta: src/core/canvas.js
-   Micropaso 1.3: Algoritmo de nodos y trayectorias sinusoidales.
+   Micropaso 1.4: Optimización en memoria fuera de pantalla (Offscreen Canvas).
    ========================================================================== */
 
 (function () {
   'use strict';
 
-  // 1. Obtención y validación de referencias del DOM
+  // 1. Referencias al Canvas visible
   const canvas = document.getElementById('wp-canvas');
   if (!canvas) {
     console.warn('[Wifi Prado Canvas]: No se encontró el elemento #wp-canvas.');
@@ -20,69 +20,118 @@
     return;
   }
 
-  // 2. Parámetros de entorno y estado
+  // 2. Variables de dimensiones y estado
   let width = 0;
   let height = 0;
   let dpr = 1;
   let nodes = [];
 
-  // Paleta de partículas corporativas (Cian / Magenta con opacidades controladas)
-  const PALETTE = [
-    'rgba(105, 185, 240, 0.45)', // Cyan base
-    'rgba(105, 185, 240, 0.25)', // Cyan atenuado
-    'rgba(228, 40, 114, 0.40)', // Magenta base
-    'rgba(210, 234, 250, 0.30)'  // Cyan 300
+  // Paleta corporativa: [r, g, b, alpha]
+  const COLOR_DEFS = [
+    { r: 105, g: 185, b: 240, a: 0.8 }, // Cyan base brillante
+    { r: 105, g: 185, b: 240, a: 0.4 }, // Cyan atenuado
+    { r: 228, g: 40,  b: 114, a: 0.8 }, // Magenta base brillante
+    { r: 210, g: 234, b: 250, a: 0.5 }  // Cyan 300
   ];
 
-  // 3. Estructura del Nodo Sinusoidal
+  // Almacén de estampas pre-renderizadas en memoria
+  let offscreenSprites = [];
+
+  // 3. Pre-renderizado en lienzos fuera de pantalla (In-Memory Canvas)
+  function buildOffscreenSprites() {
+    offscreenSprites = [];
+    const spriteSize = 32; // Tamaño de la estampa fija (ancho y alto)
+    const center = spriteSize / 2;
+
+    COLOR_DEFS.forEach(c => {
+      const offCanvas = document.createElement('canvas');
+      offCanvas.width = spriteSize;
+      offCanvas.height = spriteSize;
+      const offCtx = offCanvas.getContext('2d');
+
+      // Halo luminoso con degradado radial en memoria
+      const gradient = offCtx.createRadialGradient(
+        center, center, 0,
+        center, center, center
+      );
+      gradient.addColorStop(0, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.a})`);
+      gradient.addColorStop(0.35, `rgba(${c.r}, ${c.g}, ${c.b}, ${c.a * 0.5})`);
+      gradient.addColorStop(1, `rgba(${c.r}, ${c.g}, ${c.b}, 0)`);
+
+      offCtx.fillStyle = gradient;
+      offCtx.fillRect(0, 0, spriteSize, spriteSize);
+
+      // Núcleo sólido brillante en el centro
+      offCtx.beginPath();
+      offCtx.arc(center, center, 2, 0, Math.PI * 2);
+      offCtx.fillStyle = `rgba(255, 255, 255, ${c.a})`;
+      offCtx.fill();
+
+      offscreenSprites.push({
+        canvas: offCanvas,
+        size: spriteSize,
+        halfSize: center
+      });
+    });
+  }
+
+  // 4. Estructura del Nodo Sinusoidal optimizado
   class SinusoidalNode {
-    constructor(canvasWidth, canvasHeight) {
-      this.init(canvasWidth, canvasHeight, true);
+    constructor(w, h) {
+      this.init(w, h, true);
     }
 
     init(w, h, randomX = false) {
-      this.x = randomX ? Math.random() * w : -10;
+      this.x = randomX ? Math.random() * w : -20;
       this.baseY = Math.random() * h;
-      this.radius = 1.0 + Math.random() * 1.8;
-      this.speedX = 0.4 + Math.random() * 0.8;
-      this.amplitude = 15 + Math.random() * 35;   // Variación de altura de la onda
-      this.frequency = 0.003 + Math.random() * 0.005; // Densidad del ciclo senoidal
-      this.phase = Math.random() * Math.PI * 2;   // Desfase angular
-      this.color = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+      this.speedX = 0.35 + Math.random() * 0.65;
+      this.amplitude = 15 + Math.random() * 35;
+      this.frequency = 0.003 + Math.random() * 0.004;
+      this.phase = Math.random() * Math.PI * 2;
+      
+      // Escala individual para dar sensación de profundidad espacial
+      this.scale = 0.6 + Math.random() * 0.8;
+
+      // Asignación de estampa pre-renderizada
+      this.sprite = offscreenSprites[Math.floor(Math.random() * offscreenSprites.length)];
     }
 
     update(w, h) {
       this.x += this.speedX;
-      this.phase += 0.015;
+      this.phase += 0.012;
 
-      // Cálculo de trayectoria sinusoidal: Y = Base + A * sin(wx + fase)
+      // Trayectoria sinusoidal suave
       this.y = this.baseY + Math.sin(this.x * this.frequency + this.phase) * this.amplitude;
 
-      // Reciclaje de nodos fuera de los límites de pantalla
-      if (this.x > w + 20) {
+      // Reciclaje al salir de la pantalla
+      if (this.x > w + 30) {
         this.init(w, h, false);
       }
     }
 
     draw(context) {
-      context.beginPath();
-      context.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      context.fillStyle = this.color;
-      context.fill();
+      const renderSize = this.sprite.size * this.scale;
+      // Transferencia ultra-rápida de píxeles vía drawImage (GPU-friendly)
+      context.drawImage(
+        this.sprite.canvas,
+        this.x - renderSize / 2,
+        this.y - renderSize / 2,
+        renderSize,
+        renderSize
+      );
     }
   }
 
-  // 4. Inicializador de población de nodos
+  // 5. Configuración de nodos
   function setupNodes() {
     nodes = [];
-    // Densidad proporcional al ancho de pantalla
-    const count = Math.max(25, Math.floor(width / 35));
+    const count = Math.max(30, Math.floor(width / 30));
     for (let i = 0; i < count; i++) {
       nodes.push(new SinusoidalNode(width, height));
     }
   }
 
-  // 5. Redimensionamiento y calibración HiDPI
+  // 6. Redimensionamiento y adaptación HiDPI
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     width = window.innerWidth;
@@ -95,10 +144,13 @@
     canvas.style.height = height + 'px';
 
     ctx.scale(dpr, dpr);
+
+    // Reconstruir estampas y recolocar nodos
+    buildOffscreenSprites();
     setupNodes();
   }
 
-  // 6. Ciclo de animación
+  // 7. Bucle continuo de renderizado
   function animate() {
     ctx.clearRect(0, 0, width, height);
 
@@ -110,7 +162,7 @@
     requestAnimationFrame(animate);
   }
 
-  // 7. Eventos de inicialización
+  // 8. Eventos de inicialización
   window.addEventListener('resize', resize);
 
   if (document.readyState === 'loading') {
