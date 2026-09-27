@@ -1,7 +1,7 @@
 /* ==========================================================================
    Wifi Prado — Procedural Background Engine
    Ruta: src/core/canvas.js
-   Micropaso 1.4: Optimización en memoria fuera de pantalla (Offscreen Canvas).
+   Micropaso 1.5: Ciclo requestAnimationFrame y accesibilidad (prefers-reduced-motion).
    ========================================================================== */
 
 (function () {
@@ -20,11 +20,16 @@
     return;
   }
 
-  // 2. Variables de dimensiones y estado
+  // 2. Variables de dimensiones, estado y control de ciclo
   let width = 0;
   let height = 0;
   let dpr = 1;
   let nodes = [];
+  let animationFrameId = null;
+  let isRunning = false;
+
+  // Consulta de accesibilidad (preferencia de reducción de movimiento)
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   // Paleta corporativa: [r, g, b, alpha]
   const COLOR_DEFS = [
@@ -37,10 +42,10 @@
   // Almacén de estampas pre-renderizadas en memoria
   let offscreenSprites = [];
 
-  // 3. Pre-renderizado en lienzos fuera de pantalla (In-Memory Canvas)
+  // 3. Pre-renderizado en memoria (Offscreen Canvas)
   function buildOffscreenSprites() {
     offscreenSprites = [];
-    const spriteSize = 32; // Tamaño de la estampa fija (ancho y alto)
+    const spriteSize = 32;
     const center = spriteSize / 2;
 
     COLOR_DEFS.forEach(c => {
@@ -49,7 +54,6 @@
       offCanvas.height = spriteSize;
       const offCtx = offCanvas.getContext('2d');
 
-      // Halo luminoso con degradado radial en memoria
       const gradient = offCtx.createRadialGradient(
         center, center, 0,
         center, center, center
@@ -61,7 +65,6 @@
       offCtx.fillStyle = gradient;
       offCtx.fillRect(0, 0, spriteSize, spriteSize);
 
-      // Núcleo sólido brillante en el centro
       offCtx.beginPath();
       offCtx.arc(center, center, 2, 0, Math.PI * 2);
       offCtx.fillStyle = `rgba(255, 255, 255, ${c.a})`;
@@ -69,13 +72,12 @@
 
       offscreenSprites.push({
         canvas: offCanvas,
-        size: spriteSize,
-        halfSize: center
+        size: spriteSize
       });
     });
   }
 
-  // 4. Estructura del Nodo Sinusoidal optimizado
+  // 4. Estructura del Nodo Sinusoidal
   class SinusoidalNode {
     constructor(w, h) {
       this.init(w, h, true);
@@ -88,22 +90,15 @@
       this.amplitude = 15 + Math.random() * 35;
       this.frequency = 0.003 + Math.random() * 0.004;
       this.phase = Math.random() * Math.PI * 2;
-      
-      // Escala individual para dar sensación de profundidad espacial
       this.scale = 0.6 + Math.random() * 0.8;
-
-      // Asignación de estampa pre-renderizada
       this.sprite = offscreenSprites[Math.floor(Math.random() * offscreenSprites.length)];
     }
 
     update(w, h) {
       this.x += this.speedX;
       this.phase += 0.012;
-
-      // Trayectoria sinusoidal suave
       this.y = this.baseY + Math.sin(this.x * this.frequency + this.phase) * this.amplitude;
 
-      // Reciclaje al salir de la pantalla
       if (this.x > w + 30) {
         this.init(w, h, false);
       }
@@ -111,7 +106,6 @@
 
     draw(context) {
       const renderSize = this.sprite.size * this.scale;
-      // Transferencia ultra-rápida de píxeles vía drawImage (GPU-friendly)
       context.drawImage(
         this.sprite.canvas,
         this.x - renderSize / 2,
@@ -131,7 +125,51 @@
     }
   }
 
-  // 6. Redimensionamiento y adaptación HiDPI
+  // 6. Dibujado de un único fotograma estático (Accesibilidad / Pausa)
+  function renderStaticFrame() {
+    ctx.clearRect(0, 0, width, height);
+    for (let i = 0; i < nodes.length; i++) {
+      nodes[i].draw(ctx);
+    }
+  }
+
+  // 7. Ciclo de animación controlado
+  function loop() {
+    if (!isRunning) return;
+
+    ctx.clearRect(0, 0, width, height);
+
+    for (let i = 0; i < nodes.length; i++) {
+      nodes[i].update(width, height);
+      nodes[i].draw(ctx);
+    }
+
+    animationFrameId = requestAnimationFrame(loop);
+  }
+
+  function start() {
+    // Si la reducción de movimiento está activada, solo dibuja un cuadro estático
+    if (motionQuery.matches) {
+      stop();
+      renderStaticFrame();
+      return;
+    }
+
+    if (!isRunning) {
+      isRunning = true;
+      animationFrameId = requestAnimationFrame(loop);
+    }
+  }
+
+  function stop() {
+    isRunning = false;
+    if (animationFrameId !== null) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+  }
+
+  // 8. Redimensionamiento y calibración
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
     width = window.innerWidth;
@@ -145,33 +183,53 @@
 
     ctx.scale(dpr, dpr);
 
-    // Reconstruir estampas y recolocar nodos
     buildOffscreenSprites();
     setupNodes();
-  }
 
-  // 7. Bucle continuo de renderizado
-  function animate() {
-    ctx.clearRect(0, 0, width, height);
-
-    for (let i = 0; i < nodes.length; i++) {
-      nodes[i].update(width, height);
-      nodes[i].draw(ctx);
+    if (motionQuery.matches) {
+      renderStaticFrame();
     }
-
-    requestAnimationFrame(animate);
   }
 
-  // 8. Eventos de inicialización
-  window.addEventListener('resize', resize);
+  // 9. Manejadores de eventos del ciclo de vida y accesibilidad
+  window.addEventListener('resize', () => {
+    const wasRunning = isRunning;
+    stop();
+    resize();
+    if (wasRunning && !document.hidden && !motionQuery.matches) {
+      start();
+    }
+  });
 
+  // Pausa automática al cambiar de pestaña o minimizar ventana
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stop();
+    } else {
+      start();
+    }
+  });
+
+  // Respuesta reactiva si el usuario activa/desactiva "Reducir movimiento" en su SO
+  if (typeof motionQuery.addEventListener === 'function') {
+    motionQuery.addEventListener('change', () => {
+      if (motionQuery.matches) {
+        stop();
+        renderStaticFrame();
+      } else {
+        start();
+      }
+    });
+  }
+
+  // 10. Inicialización
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       resize();
-      requestAnimationFrame(animate);
+      start();
     });
   } else {
     resize();
-    requestAnimationFrame(animate);
+    start();
   }
 })();
