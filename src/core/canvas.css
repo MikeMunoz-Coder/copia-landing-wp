@@ -1,0 +1,46 @@
+/* ==========================================================================
+   Wifi Prado — Capas del Lienzo Procedural
+   Ruta: src/core/canvas.css
+   Responsabilidad: Fijar y apilar las capas de fondo del viewport.
+   ========================================================================== */
+
+/* 1. Capa Inferior: Degradado radial ambiental */
+.wp-canvas-gradient {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -3;
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 30%,
+    var(--wp-deep, #251474) 0%,
+    var(--wp-ink, #0C0428) 75%
+  );
+}
+
+/* 2. Capa Intermedia: Elemento Canvas para renderizado dinámico */
+.wp-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -2;           /* <--- Sitúa todo el lienzo detrás del contenido */
+  pointer-events: none;  /* <--- Permite hacer clic a través de él sin bloquear botones */
+  display: block;
+}
+
+/* 3. Capa Superior de Fondo: Viñeta perimetral de contraste */
+.wp-canvas-vignette {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center,
+    transparent 40%,
+    rgba(12, 4, 40, 0.65) 100%
+  );
+}
