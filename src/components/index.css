@@ -1,0 +1,151 @@
+/* ==========================================================================
+   Wifi Prado — Componentes de Cabecera y Navegación
+   Propuesta 1: Barra Fija con Superficie Glassmorphism
+   Ruta: src/components/index.css
+   ========================================================================== */
+
+/* 1. Contenedor Maestro Fijo en el Viewport */
+.wp-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  padding: 1.5rem 2rem;
+  background-color: rgba(12, 4, 40, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--wp-glass-border);
+  box-shadow: 0 4px 24px -2px rgba(12, 4, 40, 0.8),
+              0 0 16px 0 rgba(105, 185, 240, 0.1);
+  transition: padding 0.3s ease, background-color 0.3s ease;
+}
+
+/* 2. EFECTO AL PASAR EL MOUSE (:hover) */
+/* Al poner el cursor encima, el menú se vuelve más opaco y se encoge sutilmente */
+.wp-header:hover {
+  padding: 1rem 2rem; /* Se reduce el relleno */
+  background-color: rgba(12, 4, 40, 0.9); /* Se vuelve más oscuro */
+}
+/* 3. EFECTO AL HACER SCROLL (Para usar con JavaScript) */
+/* Cuando el usuario baja en la página, le añadiremos esta clase mediante JS */
+.wp-header.scrolled {
+  padding: 0.8rem 2rem; 
+  background-color: rgba(12, 4, 40, 0.95);
+}
+
+/* 2. Limitador del ancho de lectura y distribución horizontal */
+.wp-header__inner {
+  max-width: var(--wp-max);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 3. Bloque de Marca: Apilamiento vertical */
+.wp-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.15rem;
+  text-decoration: none;
+}
+
+/* 4. Nombre de Marca: Furore en caja alta con relieve */
+.wp-brand__name {
+  font-family: var(--wp-font-display);
+  font-size: var(--wp-font-size-2xl);
+  color: var(--wp-cyan);
+  text-shadow: var(--wp-text-3d-sm);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+/* 5. Eslogan Institucional Subordinado */
+.wp-brand__slogan {
+  display: block;
+  font-family: var(--wp-font-slogan-family);
+  font-size: var(--wp-font-slogan-size);
+  font-weight: var(--wp-font-slogan-weight);
+  letter-spacing: var(--wp-font-slogan-spacing);
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--wp-color-cyan-300);
+  opacity: 0.85;
+}
+
+/* 6. Navegación y Enlaces Interactivos */
+.wp-nav {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.wp-nav__link {
+  position: relative;
+  padding: 0.4rem 0;
+  font-family: var(--wp-font-body);
+  font-size: var(--wp-font-size-sm);
+  letter-spacing: var(--wp-letter-spacing-wide);
+  color: var(--wp-color-neutral-900);
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+/* Subrayado animado magenta en hover */
+.wp-nav__link::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--wp-magenta);
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.wp-nav__link:hover {
+  color: #ffffff;
+}
+
+.wp-nav__link:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+.tarjeta-producto {
+ position: relative;
+ left: 500px;
+ width: 300px;
+ border: 1px solid #ddd;
+ border-radius: 8px;
+ overflow: hidden;
+ font-family: var(--wp-font-body);
+ margin-top: 4rem;
+}
+
+.etiqueta-descuento {
+ position: absolute;
+ top: 12px;
+ right: 12px;
+ background-color: #ff4757;
+ color: white;
+ padding: 4px 8px;
+ font-size: 0.85rem;
+ font-weight: bold;
+ border-radius: 4px;
+ z-index: 10;
+}
+
+.tarjeta-producto img {
+    position: relative;
+    width: 15%;
+    left: 10px;
+    margin-top: 5px;  
+}
+
+.contenido {
+ padding: 16px;
+ 
+}

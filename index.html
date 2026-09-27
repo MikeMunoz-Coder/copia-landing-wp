@@ -1,23 +1,73 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Wifi Prado | Fibra Óptica de Alta Velocidad</title>
-  <meta name="description" content="Conexión de internet por fibra óptica simétrica para hogares y empresas.">
-  
+  <title>Wifi Prado | Tu conexión perfecta</title>
+  <meta name="description" content="Fibra óptica simétrica para hogares y empresas.">
+
   <!-- Hoja maestra de estilos (Cascada única) -->
   <link rel="stylesheet" href="src/main.css">
 </head>
+
 <body>
-  <!-- Contenedor temporal de verificación de fundamentos -->
-  <main style="padding: 2rem; max-width: var(--wp-max); margin: 0 auto;">
-    <h1 style="font-family: var(--wp-font-display); font-size: var(--wp-font-size-4xl); color: var(--wp-cyan); text-shadow: var(--wp-text-3d); text-transform: uppercase;">
-      Wifi Prado
+
+  <!-- Capas maestras del Lienzo de Fondo -->
+  <div class="wp-canvas-gradient" aria-hidden="true"></div>
+  <canvas id="wp-canvas" class="wp-canvas" aria-hidden="true"></canvas>
+  <div class="wp-canvas-vignette" aria-hidden="true"></div>
+
+  <!-- Cabecera Modular: Propuesta 1 (Barra Fija Translúcida) -->
+  <header class="wp-header">
+    <div class="wp-header__inner">
+      <div class="wp-brand">
+        <span class="wp-brand__name">Wifi Prado</span>
+        <span class="wp-brand__slogan">Tu conexión perfecta</span>
+      </div>
+
+      <nav class="wp-nav">
+        <a href="#planes" class="wp-nav__link">Planes</a>
+        <a href="#cobertura" class="wp-nav__link">Cobertura</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Área de Contenido Principal (con margen superior para compensar el header fijo) -->
+  <main
+    style="position: relative; z-index: 1; max-width: var(--wp-max); margin: 6rem auto 0 auto; padding: 2rem 1.5rem;">
+    <h1 style="color: var(--wp-cyan);">
+      Fibra Óptica <span style="color: var(--wp-magenta);">Simétrica</span>
     </h1>
-    <p style="font-family: var(--wp-font-body); font-size: var(--wp-font-size-lg); color: var(--wp-color-neutral-900); margin-top: 1rem;">
-      Fundamentos y tokens inicializados con éxito. Modelo de caja y reset defensivo operativos.
+
+    <h3 style="color: var(--wp-color-cyan-300); margin-top: 1rem;">
+      Velocidad ultraestable para estudiar, trabajar y jugar
+    </h3>
+
+    <p style="color: var(--wp-color-neutral-800); max-width: 650px; margin-top: 1rem;">
+      Conexión simétrica de baja latencia diseñada para conectar hogares y empresas con soporte local inmediato.
     </p>
+
+    <div style="margin-top: 2rem;">
+      <button type="button"
+        style="background: var(--wp-metal); box-shadow: var(--wp-metal-relieve); color: #fff; padding: 0.875rem 2rem; border-radius: 9999px; text-transform: uppercase; font-weight: 500; font-size: var(--wp-font-size-base); letter-spacing: var(--wp-letter-spacing-wide);">
+        Consultar Cobertura
+      </button>
+    </div>
+
+    <div class="tarjeta-producto">
+      <!-- Esta es la etiqueta flotante -->
+      <span class="etiqueta-descuento">-20%</span>
+
+      <img src="public/assets/img/imagen.webp" alt="Producto">
+      <div class="contenido">
+        <h3>Zapatillas Urbanas</h3>
+        <p>$79.99</p>
+      </div>
+    </div>
+
   </main>
+
 </body>
+
 </html>

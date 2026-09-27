@@ -1,5 +1,7 @@
 /* ==========================================================================
-   Reset defensivo y normalización base — Wifi Prado
+   Reset Defensivo y Normalización Base — Wifi Prado
+   Responsabilidad: Normalizar el comportamiento del navegador y establecer
+   la herencia tipográfica semántica sobre etiquetas HTML nativas.
    ========================================================================== */
 
 /* 1. Modelo de caja predecible en todo el árbol */
@@ -21,9 +23,10 @@ html {
 body {
   min-height: 100vh;
   min-height: 100dvh;
-  line-height: var(--wp-line-height-body, 1.5);
   font-family: var(--wp-font-family-body, system-ui, -apple-system, sans-serif);
   font-size: var(--wp-font-size-base, 1rem);
+  line-height: var(--wp-line-height-body, 1.5);
+  letter-spacing: var(--wp-letter-spacing-normal, 0em);
   color: var(--wp-color-neutral-1000, #ffffff);
   background-color: var(--wp-color-ink-1000, #0C0428);
   -webkit-font-smoothing: antialiased;
@@ -32,17 +35,72 @@ body {
   position: relative;
 }
 
-/* 3. Normalización de encabezados y elementos de texto */
-h1, h2, h3, h4, h5, h6 {
+/* 3. Mapeo semántico de encabezados (Escala Modular) */
+h1,
+h2 {
+  font-family: var(--wp-font-family-display, 'Furore', sans-serif);
+  letter-spacing: var(--wp-letter-spacing-display, 0.03em);
+  text-transform: uppercase;
+  text-shadow: var(--wp-text-3d);
+}
+
+h1 {
+  font-size: var(--wp-font-size-4xl, 3.052rem);
+  line-height: var(--wp-line-height-display, 1.1);
+}
+
+@media (min-width: 1200px) {
+  h1 {
+    font-size: var(--wp-font-size-5xl, 3.815rem);
+  }
+}
+
+h2 {
+  font-size: var(--wp-font-size-3xl, 2.441rem);
+  line-height: var(--wp-line-height-heading, 1.2);
+}
+
+h3,
+h4 {
+  font-family: var(--wp-font-family-accent, 'Mosvita', sans-serif);
+  letter-spacing: var(--wp-letter-spacing-wide, 0.02em);
+}
+
+h3 {
+  font-size: var(--wp-font-size-xl, 1.5625rem);
+  line-height: var(--wp-line-height-subheading, 1.3);
+}
+
+h4 {
+  font-size: var(--wp-font-size-lg, 1.25rem);
+  line-height: var(--wp-line-height-subheading, 1.3);
+}
+
+h5,
+h6 {
   font-weight: inherit;
   font-size: inherit;
 }
 
-p, span, a, label {
+/* 4. Manejo de texto y ajuste de líneas */
+p,
+span,
+a,
+label {
   overflow-wrap: break-word;
 }
 
-/* 4. Normalización de multimedia incrustada */
+p,
+span,
+label {
+  font-family: inherit;
+}
+
+p {
+  line-height: var(--wp-line-height-body, 1.5);
+}
+
+/* 5. Normalización de multimedia y lienzos */
 img,
 svg,
 video,
@@ -52,7 +110,7 @@ canvas {
   height: auto;
 }
 
-/* 5. Formularios y controles interactivos */
+/* 6. Normalización de formularios y controles interactivos */
 button,
 input,
 select,
@@ -65,15 +123,16 @@ textarea {
 
 button {
   cursor: pointer;
+  font-family: var(--wp-font-family-body, system-ui, sans-serif);
 }
 
-/* 6. Listas semánticas */
+/* 7. Listas semánticas */
 ul,
 ol {
   list-style: none;
 }
 
-/* 7. Accesibilidad en foco de navegación */
+/* 8. Accesibilidad en foco de navegación por teclado */
 :focus-visible {
   outline: 2px solid var(--wp-cyan, #69B9F0);
   outline-offset: 3px;
@@ -83,7 +142,7 @@ ol {
   outline: none;
 }
 
-/* 8. Respeto estricto a preferencias de movimiento reducido */
+/* 9. Respeto estricto a preferencias del sistema (Movimiento reducido) */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -95,7 +154,7 @@ ol {
   }
 }
 
-/* 9. Utilidad de accesibilidad para lectores de pantalla */
+/* 10. Utilidad de accesibilidad para lectores de pantalla */
 .wp-sr-only {
   position: absolute;
   width: 1px;
