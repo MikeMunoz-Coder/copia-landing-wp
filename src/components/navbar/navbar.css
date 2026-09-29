@@ -1,0 +1,573 @@
+/* ==========================================================================
+   Wifi Prado — Componente Navbar
+   Ruta: src/components/navbar/navbar.css
+   Responsabilidad: Estructura fija, glassmorphism, marca y enlaces.
+   ========================================================================== */
+/* Navbar ==================================================================
+   Ruta: src/components/navbar/navbar.css
+   Barra fija, marca, enlaces, acciones, hamburguesa y menú móvil.
+   ========================================================================== */
+/* 1. Contenedor Maestro Fijo en el Viewport */
+.wp-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  padding: 0 20px;
+  /* Baja suavemente al cargar en vez de aparecer de golpe */
+  animation: wp-nav-in 0.9s var(--wp-ease, cubic-bezier(0.16, 1, 0.3, 1)) both;
+}
+
+@keyframes wp-nav-in {
+  from {
+    opacity: 0;
+    transform: translateY(-22px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   SECTOR: Cápsula de Navegación (src/components/navbar/navbar.css)
+   ACCIÓN: Composición de superficie translúcida y dimensiones iniciales
+   DESCRIPCIÓN: Establece la cápsula flotante con esquinas redondeadas, fondo 
+   semitransparente con desenfoque de fondo y transiciones para el scroll.
+   ========================================================================== */
+.wp-nav {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: var(--wp-max, 1200px);
+  height: 78px;
+  margin-top: 18px;
+  padding: 0 14px 0 20px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  background: rgba(23, 10, 62, 0.30);
+  -webkit-backdrop-filter: blur(18px) saturate(1.3);
+  backdrop-filter: blur(18px) saturate(1.3);
+  transition: 
+    height 0.35s ease,
+    margin 0.35s ease,
+    background 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+
+/* ==========================================================================
+   SECTOR: Transición Reactiva de Scroll (src/components/navbar/navbar.css)
+   ACCIÓN: Contracción espacial y densificación visual al desplazar la página
+   DESCRIPCIÓN: Sobrescribe dimensiones, bordes y fondo al recibir la clase 
+   inyectada por navbar.js cuando window.scrollY supera los 24px.
+   ========================================================================== */
+.wp-header.is-scrolled .wp-nav {
+  height: 62px;
+  margin-top: 10px;
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(23, 10, 62, 0.62);
+  box-shadow: 0 18px 44px rgba(12, 4, 40, 0.42);
+}
+
+.wp-brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  flex-shrink: 0;
+}
+
+/* Marca: solo el planeta. Giro sobre su eje en hover con perspectiva 3D */
+/* ==========================================================================
+   SECTOR: Identidad Visual y Logotipo (src/components/navbar/navbar.css)
+   ACCIÓN: Configuración de perspectiva tridimensional y animación axial
+   DESCRIPCIÓN: Establece un punto de fuga perspectivo y rota el planeta sobre
+   su propio eje Y en 360 grados al recibir el cursor en estado :hover.
+   ========================================================================== */
+.wp-brand__mark {
+  display: block;
+  perspective: 520px;
+  height: 44px;
+  transition: height 0.35s ease;
+}
+
+.wp-brand__mark img {
+  display: block;
+  width: auto;
+  height: 100%;
+  filter: drop-shadow(0 4px 12px rgba(8, 3, 34, 0.5));
+  transform-style: preserve-3d;
+  backface-visibility: visible;
+}
+/*=====*/
+
+.wp-brand:hover .wp-brand__mark img {
+  animation: wp-brand-spin 1.15s var(--wp-ease, cubic-bezier(0.16, 1, 0.3, 1));
+}
+
+@keyframes wp-brand-spin {
+  from {
+    transform: rotateY(0);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+.wp-header.is-scrolled .wp-brand__mark {
+  height: 38px;
+}
+
+.wp-nav__links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 16px;
+}
+
+.wp-nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 14.5px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.72);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.wp-nav__link:hover {
+  color: #fff;
+}
+
+/* Enlaces adaptados como tarjetas espaciales píldora */
+.wp-nav__link.wp-space-card {
+  --card-accent: #FF4D9D;
+  --card-glass: 0.42;
+  --card-radius: 999px;
+  --card-border: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  white-space: nowrap;
+  border-radius: var(--card-radius);
+}
+
+.wp-nav__link.wp-space-card::after {
+  display: none;
+}
+
+.wp-nav__link.wp-space-card:hover {
+  transform: translateY(-1px);
+  --card-border: rgba(255, 255, 255, 0.55);
+  background: var(--wp-metal, linear-gradient(180deg, #FFE3F2 0%, #E42872 52%, #8E0A47 100%));
+  box-shadow: var(--wp-metal-relieve, inset 0 1px 0 rgba(255,255,255,0.45), 0 8px 20px rgba(228,40,114,0.45));
+  text-shadow: 0 1px 2px rgba(90, 4, 44, 0.55);
+}
+
+.wp-nav__link.wp-space-card[aria-current="page"] {
+  --card-glass: 0.7;
+  --card-border: var(--card-accent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.28),
+    0 0 20px -6px var(--card-accent);
+}
+
+/* --- Redes Sociales (Navbar y Menú) --- */
+.wp-social {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.wp-social a {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.72);
+  transition: 
+    color 0.25s var(--wp-ease, ease),
+    background 0.25s var(--wp-ease, ease),
+    transform 0.25s var(--wp-ease, ease);
+}
+
+.wp-social a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.wp-social--nav a {
+  --card-accent: #FF4D9D;
+  --card-glass: 0.42;
+  --card-radius: 11px;
+  --card-border: rgba(255, 255, 255, 0.18);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--card-radius);
+}
+
+.wp-social--nav a svg {
+  width: 21px;
+  height: 21px;
+}
+
+.wp-social--nav a:hover {
+  --card-border: rgba(255, 255, 255, 0.55);
+  background: var(--wp-metal, linear-gradient(180deg, #FFE3F2 0%, #E42872 52%, #8E0A47 100%));
+  box-shadow: var(--wp-metal-relieve, inset 0 1px 0 rgba(255,255,255,0.45), 0 8px 20px rgba(228,40,114,0.45));
+}
+
+.wp-social--nav a:hover svg {
+  filter: drop-shadow(0 1px 2px rgba(90, 4, 44, 0.6));
+}
+
+.wp-social--nav a:hover svg[fill="currentColor"],
+.wp-social--nav a:hover svg [fill="currentColor"] {
+  fill: #fff;
+}
+
+.wp-social--nav a:hover svg[stroke="currentColor"],
+.wp-social--nav a:hover svg [stroke="currentColor"] {
+  stroke: #fff;
+}
+
+/* Aplicación del gradiente SVG compartido (#wpMetalRosa) */
+.wp-social svg[fill="currentColor"],
+.wp-social svg [fill="currentColor"] {
+  fill: url(#wpMetalRosa);
+}
+
+.wp-social svg[stroke="currentColor"],
+.wp-social svg [stroke="currentColor"] {
+  stroke: url(#wpMetalRosa);
+}
+
+.wp-social svg {
+  filter: drop-shadow(0 0 4px rgba(228, 40, 114, 0.5));
+  transition: filter 0.25s var(--wp-ease, ease);
+}
+
+.wp-social a:hover svg {
+  filter: drop-shadow(0 0 9px rgba(255, 95, 168, 0.85)) brightness(1.12);
+}
+
+.wp-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.wp-social--nav {
+  padding-right: 4px;
+  margin-right: 2px;
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+@media (max-width: 1160px) {
+  .wp-social--nav {
+    display: none;
+  }
+}
+
+.wp-nav__spacer {
+  flex: 1;
+}
+
+.wp-nav__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Botón WhatsApp */
+.wp-btn-wa {
+  --card-accent: #FF4D9D;
+  --card-glass: 0.42;
+  --card-radius: 11px;
+  --card-border: rgba(255, 255, 255, 0.18);
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  border-radius: var(--card-radius);
+  color: #fff;
+  transition: 
+    color 0.25s var(--wp-ease, ease),
+    background 0.25s var(--wp-ease, ease),
+    box-shadow 0.25s var(--wp-ease, ease),
+    border-color 0.25s var(--wp-ease, ease),
+    transform 0.25s var(--wp-ease, ease);
+}
+
+.wp-btn-wa svg {
+  width: 21px;
+  height: 21px;
+}
+
+.wp-btn-wa svg[fill="currentColor"],
+.wp-btn-wa svg [fill="currentColor"] {
+  fill: url(#wpMetalRosa);
+}
+
+.wp-btn-wa:hover {
+  transform: translateY(-2px);
+  --card-border: rgba(255, 255, 255, 0.55);
+  background: var(--wp-metal, linear-gradient(180deg, #FFE3F2 0%, #E42872 52%, #8E0A47 100%));
+  box-shadow: var(--wp-metal-relieve, inset 0 1px 0 rgba(255,255,255,0.45), 0 8px 20px rgba(228,40,114,0.45));
+  color: #fff;
+}
+
+.wp-btn-wa:hover svg[fill="currentColor"],
+.wp-btn-wa:hover svg [fill="currentColor"] {
+  fill: #fff;
+}
+
+.wp-btn-wa:hover svg {
+  filter: drop-shadow(0 1px 2px rgba(90, 4, 44, 0.6));
+}
+
+/* Botón Gestiona tu pago */
+.wp-btn-pay {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 42px;
+  padding: 0 22px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  background: linear-gradient(180deg, #F4508A 0%, #E42872 52%, #C21C5E 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.36),
+    inset 0 -2px 0 rgba(120, 8, 52, 0.42),
+    0 8px 20px rgba(228, 40, 114, 0.42);
+  transition: transform 0.25s var(--wp-ease, ease), box-shadow 0.25s var(--wp-ease, ease);
+  text-decoration: none;
+}
+
+.wp-btn-pay:hover {
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -2px 0 rgba(120, 8, 52, 0.42),
+    0 13px 28px rgba(228, 40, 114, 0.55);
+}
+
+/* Botón Hamburguesa */
+.wp-burger {
+  display: none;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+
+.wp-burger span {
+  display: block;
+  width: 18px;
+  height: 1.6px;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.wp-burger span + span {
+  margin-top: 5px;
+}
+
+/* Menú móvil a pantalla completa */
+.wp-mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  overflow-y: auto;
+  padding: 78px 0 32px;
+  background: rgba(23, 10, 62, 0.82);
+  -webkit-backdrop-filter: blur(26px);
+  backdrop-filter: blur(26px);
+}
+
+.wp-mobile-menu.is-open {
+  display: flex;
+}
+
+@media (max-height: 720px) {
+  .wp-mobile-menu {
+    justify-content: flex-start;
+  }
+}
+
+.wp-mobile-menu__close {
+  position: absolute;
+  top: 22px;
+  right: 22px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.wp-mobile-menu a.wp-mobile-menu__link {
+  --card-accent: #FF4D9D;
+  --card-glass: 0.42;
+  --card-radius: 999px;
+  --card-border: rgba(255, 255, 255, 0.18);
+  display: grid;
+  place-items: center;
+  width: min(360px, 82vw);
+  height: 54px;
+  font-family: var(--wp-font-display, 'Furore', sans-serif);
+  font-size: 25px;
+  letter-spacing: 0.06em;
+  color: #fff;
+  text-decoration: none;
+}
+
+.wp-mobile-menu a.wp-mobile-menu__link:hover,
+.wp-mobile-menu a.wp-mobile-menu__link:active {
+  color: #fff;
+  --card-border: rgba(255, 255, 255, 0.55);
+  background: var(--wp-metal, linear-gradient(180deg, #FFE3F2 0%, #E42872 52%, #8E0A47 100%));
+  box-shadow: var(--wp-metal-relieve, inset 0 1px 0 rgba(255,255,255,0.45), 0 8px 20px rgba(228,40,114,0.45));
+  text-shadow: 0 1px 2px rgba(90, 4, 44, 0.55);
+}
+
+.wp-mobile-menu__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(360px, 82vw);
+  margin-top: 18px;
+}
+
+.wp-mobile-menu__actions a {
+  display: grid;
+  place-items: center;
+  height: 54px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+}
+
+.wp-mobile-menu__actions .is-pay {
+  background: var(--wp-magenta, #E42872);
+}
+
+.wp-mobile-menu__actions .is-wa {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+  font-weight: 500;
+}
+
+/* Redes dentro del menú móvil */
+.wp-social--menu {
+  margin-top: 22px;
+  gap: 10px;
+}
+
+.wp-social--menu a {
+  --card-accent: #FF4D9D;
+  --card-glass: 0.42;
+  --card-radius: 13px;
+  --card-border: rgba(255, 255, 255, 0.18);
+  width: 44px;
+  height: 44px;
+  border-radius: var(--card-radius);
+}
+
+.wp-social--menu a svg {
+  width: 24px;
+  height: 24px;
+}
+
+.wp-social--menu a:hover,
+.wp-social--menu a:active {
+  --card-border: rgba(255, 255, 255, 0.55);
+  background: var(--wp-metal, linear-gradient(180deg, #FFE3F2 0%, #E42872 52%, #8E0A47 100%));
+  box-shadow: var(--wp-metal-relieve, inset 0 1px 0 rgba(255,255,255,0.45), 0 8px 20px rgba(228,40,114,0.45));
+}
+
+.wp-social--menu a:hover svg[fill="currentColor"],
+.wp-social--menu a:hover svg [fill="currentColor"],
+.wp-social--menu a:active svg[fill="currentColor"],
+.wp-social--menu a:active svg [fill="currentColor"] {
+  fill: #fff;
+}
+
+.wp-social--menu a:hover svg[stroke="currentColor"],
+.wp-social--menu a:hover svg [stroke="currentColor"],
+.wp-social--menu a:active svg[stroke="currentColor"],
+.wp-social--menu a:active svg [stroke="currentColor"] {
+  stroke: #fff;
+}
+
+/* Adaptabilidad Responsiva */
+@media (max-width: 899px) {
+  .wp-nav__links,
+  .wp-btn-wa {
+    display: none;
+  }
+  .wp-burger {
+    display: grid;
+  }
+  .wp-nav {
+    padding: 0 14px;
+  }
+}
+
+@media (max-width: 560px) {
+  .wp-brand__mark {
+    height: 38px;
+  }
+  .wp-nav {
+    padding: 0 10px;
+    gap: 10px;
+  }
+  .wp-nav__actions {
+    gap: 8px;
+    min-width: 0;
+  }
+  .wp-btn-pay {
+    padding: 0 13px;
+    font-size: 13px;
+    height: 38px;
+  }
+  .wp-burger {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wp-brand:hover .wp-brand__mark img {
+    animation: none;
+  }
+  .wp-header {
+    animation: none;
+  }
+}
