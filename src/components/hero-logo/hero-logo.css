@@ -1,0 +1,116 @@
+/* ==========================================================================
+   Logo animado del hero — Wifi Prado
+   ========================================================================== */
+
+.wp-logo {
+  --wp-dur: 6.5s;    /* vuelta completa */
+  --wp-star: 38px;   /* tamaño de la estrella a 800px de ancho; escala sola */
+  --wp-s: var(--wp-star);
+  position: relative;
+  width: 100%;
+  /* Calibración de escala: ajusta este valor para aumentar o reducir el tamaño global */
+  max-width: 440px; /* (Valor previo: 340px) */
+  aspect-ratio: 3956 / 2963;
+  margin-bottom: 22px;
+}
+
+.wp-logo img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 20px rgba(8, 3, 34, 0.55));
+}
+
+.wp-orbit {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Estrella y estela recorren la misma trayectoria, desfasadas en el tiempo */
+.wp-orbit > * {
+  position: absolute;
+  left: 0;
+  top: 0;
+  offset-path: var(--wp-path);
+  offset-rotate: 0deg;
+  animation: wp-logo-orbit var(--wp-dur) linear infinite,
+            wp-logo-orbit-visible var(--wp-dur) linear infinite;
+}
+
+@keyframes wp-logo-orbit {
+  from { offset-distance: 0%; }
+  to { offset-distance: 100%; }
+}
+
+/* Se apaga en el tramo en que el aro pasa por DETRÁS del planeta */
+@keyframes wp-logo-orbit-visible {
+  0%, 63% { opacity: 1; }
+  66.5% { opacity: 0; }
+  85% { opacity: 0; }
+  88.5%, 100% { opacity: 1; }
+}
+
+@keyframes wp-logo-twinkle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.28) rotate(45deg); }
+}
+
+.wp-star {
+  width: var(--wp-s);
+  height: var(--wp-s);
+}
+
+.wp-star i {
+  position: absolute;
+  inset: 0;
+  display: block;
+  animation: wp-logo-twinkle calc(var(--wp-dur) / 4) ease-in-out infinite;
+}
+
+.wp-star i::before { /* núcleo */
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0 16%, rgba(255, 255, 255, 0.9) 26%, rgba(232, 120, 200, 0.5) 46%, rgba(120, 60, 190, 0.22) 66%, rgba(120, 60, 190, 0) 78%);
+}
+
+.wp-star b { /* destello: cuatro rayos */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  border-radius: 99px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.95) 45%, #fff 50%, rgba(255, 255, 255, 0.95) 55%, rgba(255, 255, 255, 0) 100%);
+  transform: translate(-50%, -50%) rotate(var(--r));
+  width: var(--l);
+  height: var(--w);
+  filter: blur(0.7px);
+  opacity: var(--o);
+}
+
+.wp-trail::before {
+  content: "";
+  position: absolute;
+  inset: -160%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff 0 18%, rgba(255, 214, 245, 0.85) 34%, rgba(226, 120, 205, 0.35) 58%, rgba(140, 70, 200, 0) 80%);
+}
+
+@media (max-width: 899px) {
+  .wp-logo {
+    max-width: 270px;
+    margin-bottom: 18px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wp-orbit {
+    display: none;
+  }
+}

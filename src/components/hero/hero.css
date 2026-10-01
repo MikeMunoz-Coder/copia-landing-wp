@@ -1,0 +1,299 @@
+/* ==========================================================================
+   Hero — Maquetación del Contenedor Principal
+   ========================================================================== */
+
+.wp-hero {
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(300px, 1fr) minmax(320px, 1.05fr);
+  align-items: center;
+  gap: 40px;
+  max-width: var(--wp-max, 1200px);
+  margin: 0 auto;
+  padding: 132px 24px 72px;
+}
+
+.wp-hero__copy {
+  position: relative;
+  z-index: 30;
+  max-width: 560px;
+  /* ESCALA RECOMENDADA EN UNA SOLA LÍNEA:
+     - Mínimo en móviles: 1.625rem (26px)
+     - Fluido: 3.4vw
+     - Tope máximo en escritorio: 2.65rem (~42px) [equivalente al paso 3xl/4xl] */
+  --wp-title-size: clamp(1.5rem, 3vw, 2.441rem);
+}
+
+/* Centra el contenedor del logo en la columna */
+.wp-hero__copy .wp-logo {
+  margin-inline: auto;
+}
+
+@media (min-width: 1200px) {
+  .wp-hero__copy .wp-logo {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* ==========================================================================
+   SECTOR: Distintivo Superior (.wp-eyebrow)
+   ACCIÓN: Glassmorphism, centrado simétrico y alineación flex con el cohete
+   ========================================================================== */
+
+.wp-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--glass-bg, rgba(255, 255, 255, 0.07));
+  backdrop-filter: var(--glass-blur, blur(18px));
+  -webkit-backdrop-filter: var(--glass-blur, blur(18px));
+  border: var(--glass-border, 1px solid rgba(255, 255, 255, 0.16));
+  border-radius: 9999px;
+  box-shadow: 0 4px 16px rgba(12, 4, 40, 0.35);
+  
+  /* Centrado horizontal respecto a la columna del Hero */
+  margin-inline: auto;
+  margin-bottom: 20px;
+  width: fit-content;
+}
+
+/* Indicador de pulso luminoso (Punto cian de red activa) */
+.wp-eyebrow__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--color-cyan-900, #78c0f2);
+  box-shadow: 0 0 8px var(--color-cyan-1000, #69b9f0);
+  flex-shrink: 0;
+}
+
+/* Tipografía de la insignia */
+.wp-eyebrow__text {
+  font-family: 'Roboto', sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+/* Contenedor e integración del icono del cohete */
+.wp-eyebrow__icon {
+  display: inline-block;
+  flex-shrink: 0;
+  vertical-align: middle;
+  margin-left: 2px;
+  /* Punto de rotación en el centro exacto del SVG */
+  transform-origin: 50% 50%;
+  /* Estado base inclinado a 45° */
+  transform: rotate(45deg);
+  /* Vinculación de la microinteracción */
+  animation: wp-rocket-bounce 2.2s ease-in-out infinite
+}
+
+/* ==========================================================================
+   Microinteracción de Propulsión del Cohete (GPU Composition)
+   ========================================================================== */
+@keyframes wp-rocket-bounce {
+  0%, 100% {
+    /* Estado de reposo a 45° */
+    transform: translate(0, 0) rotate(45deg);
+  }
+  50% {
+    /* Propulsión: se traslada en diagonal hacia arriba-derecha (+X, -Y) 
+       y realiza una leve oscilación angular a 48° */
+    transform: translate(2px, -2px) rotate(48deg);
+  }
+}
+
+.wp-hero__title {
+  /*font-family: var(--wp-font-display, 'Furore', sans-serif);*/
+  font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /*font-weight: 400;*/
+  font-weight: 700;
+  font-size: var(--wp-title-size);
+  /*line-height: 0.95;*/
+  line-height: 1.15;
+  /*letter-spacing: 0.014em;*/
+  letter-spacing: -0.015em;
+  text-align: center;         /* Centra el texto horizontalmente */
+  white-space: nowrap;        /* Mantiene el texto en una sola línea */
+  margin-top: 12px;           /* Separación vertical directa respecto a la base del logo */
+  margin-bottom: 14px;        /* Margen de respiración hacia el subtítulo */
+  text-shadow: 0 4px 20px rgba(12, 4, 40, 0.55);
+  position: relative;
+}
+
+.wp-hero__title::before,
+.wp-hero__title::after {
+  content: "";
+  position: absolute;
+  inset: -18% -8%;
+  pointer-events: none;
+  opacity: 0;
+  background-repeat: no-repeat;
+}
+
+.wp-hero__title::before {
+  background-image:
+    radial-gradient(circle, #fff 0 9%, rgba(234, 248, 255, 0.85) 20%, rgba(155, 212, 247, 0.35) 40%, transparent 62%),
+    radial-gradient(circle, #fff 0 10%, rgba(255, 255, 255, 0.7) 22%, rgba(155, 212, 247, 0.3) 44%, transparent 66%),
+    radial-gradient(circle, #fff 0 12%, rgba(234, 248, 255, 0.6) 26%, transparent 60%);
+  background-size: 16px 16px, 11px 11px, 8px 8px;
+  background-position: 9% 14%, 71% 6%, 42% 88%;
+}
+
+.wp-hero__title::after {
+  background-image:
+    radial-gradient(circle, #fff 0 10%, rgba(255, 255, 255, 0.8) 22%, rgba(228, 40, 114, 0.3) 44%, transparent 66%),
+    radial-gradient(circle, #fff 0 9%, rgba(234, 248, 255, 0.75) 20%, transparent 58%),
+    radial-gradient(circle, #fff 0 12%, rgba(155, 212, 247, 0.6) 26%, transparent 62%);
+  background-size: 13px 13px, 9px 9px, 7px 7px;
+  background-position: 93% 34%, 26% 4%, 58% 92%;
+}
+
+@keyframes wp-title-sparkle {
+  0%, 100% { opacity: 0; transform: scale(0.72); }
+  40% { opacity: 1; transform: scale(1); }
+  70% { opacity: 0.35; transform: scale(1.08); }
+}
+
+@media (hover: hover) {
+  .wp-hero__title:hover {
+    text-shadow: 0 4px 24px rgba(12, 4, 40, 0.55), 0 0 30px rgba(155, 212, 247, 0.5);
+  }
+  .wp-hero__title:hover::before { animation: wp-title-sparkle 1.6s ease-in-out infinite; }
+  .wp-hero__title:hover::after { animation: wp-title-sparkle 1.6s ease-in-out 0.8s infinite; }
+}
+
+.wp-hero__sub {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: clamp(14.5px, 1.05vw, 16.5px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.8);
+  text-wrap: pretty;
+  /*margin-top: 18px;*/
+
+  /* Centrado y composición horizontal simétrica */
+  text-align: center;
+  max-width: 460px;
+  margin-inline: auto;      /* Centra el bloque dentro del contenedor de copia */
+  
+  /* Ritmo vertical */
+  margin-top: 14px;         /* Separación respecto al titular principal */
+  margin-bottom: 28px;      /* Espacio de respiración hacia los botones CTA */
+}
+
+.wp-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 30px;
+}
+
+.wp-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 58px;
+  padding: 0 38px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  background: linear-gradient(180deg, #F4508A 0%, #E42872 52%, #C21C5E 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.38),
+    inset 0 -2px 0 rgba(120, 8, 52, 0.45),
+    0 10px 24px rgba(228, 40, 114, 0.45),
+    0 2px 4px rgba(12, 4, 40, 0.35);
+  transition: transform 0.25s var(--wp-ease, ease), box-shadow 0.25s var(--wp-ease, ease), filter 0.25s var(--wp-ease, ease);
+  text-decoration: none;
+}
+
+.wp-cta:hover {
+  color: #fff;
+  transform: translateY(-3px);
+  filter: saturate(1.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    inset 0 -2px 0 rgba(120, 8, 52, 0.45),
+    0 16px 34px rgba(228, 40, 114, 0.55),
+    0 3px 6px rgba(12, 4, 40, 0.4);
+}
+
+.wp-cta:active { transform: translateY(-1px); }
+
+.wp-cta--ghost {
+  height: 58px;
+  padding: 0 34px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.06) 100%);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 8px 20px rgba(12, 4, 40, 0.35);
+}
+
+.wp-cta--ghost:hover {
+  color: #fff;
+  transform: translateY(-3px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.24) 0%, rgba(255, 255, 255, 0.1) 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 14px 28px rgba(12, 4, 40, 0.45);
+}
+
+@media (max-width: 1199px) {
+  .wp-hero {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 118px 22px 60px;
+    justify-items: center;
+  }
+  .wp-hero__copy {
+    max-width: 640px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .wp-hero__media { min-height: 420px; width: 100%; }
+  .wp-hero__sub { margin-inline: auto; }
+  .wp-hero__actions { justify-content: center; }
+}
+
+@media (max-width: 560px) {
+  .wp-hero { padding: 108px 18px 48px; gap: 24px; }
+  .wp-hero__actions .wp-cta,
+  .wp-hero__actions .wp-cta--ghost { flex: 1 1 100%; justify-content: center; }
+}
+
+@media (min-width: 1800px) {
+  .wp-hero { padding: 150px 40px 90px; gap: 60px; }
+  .wp-hero__copy { 
+    max-width: 700px; 
+    /* Tope controlado en pantallas grandes: máximo 44px */
+    --wp-title-size: clamp(2rem, 2.5vw, 2.75rem); 
+  }
+  .wp-hero__sub { font-size: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wp-hero__copy { animation: none; }
+  .wp-eyebrow__icon { animation: none; }
+  .wp-hero__title:hover::before,
+  .wp-hero__title:hover::after {
+    animation: none;
+    opacity: 0;
+  }
+}

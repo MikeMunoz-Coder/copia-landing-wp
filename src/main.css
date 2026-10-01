@@ -6,6 +6,7 @@
 /* --- 1. Fundamentos y Tokens --- */
 @import "styles/tokens.css";
 @import "styles/reset.css";
+@import "styles/animations.css";
 @import "styles/space-card.css";
 
 /* --- 2. Núcleo Procedural (Lienzo de Fondo) --- */
@@ -13,4 +14,5 @@
 
 /* --- 3. Capa de Componentes --- */
 @import "components/navbar/navbar.css";
-
+@import "components/hero/hero.css";
+@import "components/hero-logo/hero-logo.css";
