@@ -164,17 +164,152 @@
     </div>
 
     <!-- Contenido Principal Temporal para comprobación de Scroll -->
-    <main id="main"
-      style="position: relative; z-index: 1; max-width: var(--wp-max); margin: 120px auto 0; padding: 2rem 1.5rem; min-height: 180vh;">
-      <h1 style="color: var(--wp-cyan); font-family: var(--wp-font-display);">
-        Fibra Óptica <span style="color: var(--wp-magenta);">Simétrica</span>
-      </h1>
-      <p style="color: var(--wp-color-neutral-800); max-width: 600px; margin-top: 1rem;">
-        Desplaza la página hacia abajo para comprobar la reducción y contracción de la cápsula del navbar al recibir la
-        clase de scroll.
-      </p>
-    </main>
+    <!-- ==========================================================================
+       SECTOR: Sección Principal Hero (index.html)
+       ACCIÓN: Estructura semántica de dos columnas (Copywriting + Media)
+       DESCRIPCIÓN: Establece el bloque de apertura visual con micro-etiqueta
+       titular, jerarquía h1, llamadas a la acción (CTAs) y contenedor para
+       la integración del logotipo orbital y carrusel multimedia.
+       ========================================================================== -->
+    <main id="main">
 
+      <!-- Panel que agrupa hero y fichas: el lienzo se ve nítido alrededor,
+         así se lee como una capa apoyada encima y no como un fondo plano. -->
+      <!-- ==========================================================================
+     SECCIÓN HERO: Estructura Semántica de Dos Columnas (Copywriting + Media)
+     ========================================================================== -->
+      <div class="wp-pane">
+        <section class="wp-hero" aria-label="Wifi Prado, fibra óptica">
+
+          <!-- Columna Izquierda: Mensaje Comercial y Acciones -->
+          <div class="wp-hero__copy" data-reveal="left">
+            <!-- Distintivo Superior (Eyebrow Badge) con Cohete SVG integrado -->
+          <div class="wp-eyebrow" id="wp-eyebrow" data-reveal="fade">
+            <span class="wp-eyebrow__dot" aria-hidden="true"></span>
+            <span class="wp-eyebrow__text" id="wp-eyebrow-text">HASTA 300 MBPS DE VELOCIDAD</span>
+            <svg class="wp-eyebrow__icon wp-rocket" viewBox="0 0 32 40" width="16" height="20" aria-hidden="true">
+              <g class="wp-rocket__body">
+                <path d="M16 2c4.4 4 7 9.6 7 15.8v6.4H9v-6.4C9 11.6 11.6 6 16 2Z" fill="#EDF4FB"/>
+                <path d="M16 2c4.4 4 7 9.6 7 15.8v6.4h-7V2Z" fill="#C4D7EA"/>
+                <circle cx="16" cy="14" r="3.1" fill="#69B9F0"/>
+                <circle cx="16" cy="14" r="1.5" fill="#1B2E5A" opacity=".55"/>
+                <path d="M9 20.5 4.5 26v3.5L9 26.5v-6Z" fill="#E42872"/>
+                <path d="M23 20.5 27.5 26v3.5L23 26.5v-6Z" fill="#E42872"/>
+              </g>
+              <g class="wp-rocket__flame">
+                <path d="M16 25c2 2.6 3 5 3 7.2 0 2-1.3 3.6-3 3.6s-3-1.6-3-3.6c0-2.2 1-4.6 3-7.2Z" fill="#F5B544"/>
+                <path d="M16 28c1 1.6 1.5 3 1.5 4.2 0 1.2-.7 2.1-1.5 2.1s-1.5-.9-1.5-2.1c0-1.2.5-2.6 1.5-4.2Z" fill="#FFF0C2"/>
+              </g>
+            </svg>
+          </div>
+
+            <!-- Isotipo Orbital con Órbita Paramétrica -->
+            <div class="wp-logo" data-reveal="fade">
+              <img src="public/assets/img/logo-wifiprado-trazos.webp" alt="Wifi Prado" width="1000" height="749">
+
+              <div class="wp-orbit" aria-hidden="true">
+                <!-- 9 Nodos de Estela: Progresión de tamaño, opacidad y retardo temporal negativo -->
+                <span class="wp-trail"
+                  style="width:calc(var(--wp-s)*0.100);height:calc(var(--wp-s)*0.100);opacity:0.093;animation-delay:calc(var(--wp-dur)*-0.913),calc(var(--wp-dur)*-0.913)"></span>
+                <span class="wp-trail"
+                  style="width:calc(var(--wp-s)*0.122);height:calc(var(--wp-s)*0.122);opacity:0.152;animation-delay:calc(var(--wp-dur)*-0.921),calc(var(--wp-dur)*-0.921)"></span>
+                <span class="wp-trail"
+                  style="width:calc(var(--wp-s)*0.144);height:calc(var(--wp-s)*0.144);opacity:0.210;animation-delay:calc(var(--wp-dur)*-0.930),calc(var(--wp-dur)*-0.930)"></span>
+                <span class="wp-trail"
+                  style="width:calc(var(--wp-s)*0.167);height:calc(var(--wp-s)*0.167);opacity:0.269;animation-delay:calc(var(--wp-dur)*-0.938),calc(var(--wp-dur)*-0.938)"></span>
+                <span class="wp-trail"
+                  style="width:calc(var(--wp-s)*0.189);height:calc(var(--wp-s)*0.189);opacity:0.327;animation-delay:calc(var(--wp-dur)*-0.946),calc(var(--wp-dur)*-0.946)"></span>
+                <span class="wp-trail"
+                  style="width:calc(var(--wp-s)*0.211);height:calc(var(--wp-s)*0.211);opacity:0.386;animation-delay:calc(var(--wp-dur)*-0.955),calc(var(--wp-dur)*-0.955)"></span>
+                <span class="wp-trail"
+                  style="width:calc(var(--wp-s)*0.233);height:calc(var(--wp-s)*0.233);opacity:0.444;animation-delay:calc(var(--wp-dur)*-0.963),calc(var(--wp-dur)*-0.963)"></span>
+                <span class="wp-trail"
+                  style="width:calc(var(--wp-s)*0.256);height:calc(var(--wp-s)*0.256);opacity:0.503;animation-delay:calc(var(--wp-dur)*-0.971),calc(var(--wp-dur)*-0.971)"></span>
+                <span class="wp-trail"
+                  style="width:calc(var(--wp-s)*0.278);height:calc(var(--wp-s)*0.278);opacity:0.561;animation-delay:calc(var(--wp-dur)*-0.980),calc(var(--wp-dur)*-0.980)"></span>
+
+                <!-- Estrella de 4 Puntas -->
+                <span class="wp-star">
+                  <i>
+                    <b style="--r:0deg;--l:calc(var(--wp-s)*2.6);--w:max(1.4px,calc(var(--wp-s)*.055));--o:.95"></b>
+                    <b style="--r:90deg;--l:calc(var(--wp-s)*2.1);--w:max(1.2px,calc(var(--wp-s)*.045));--o:.85"></b>
+                    <b style="--r:45deg;--l:calc(var(--wp-s)*1.2);--w:max(1px,calc(var(--wp-s)*.03));--o:.6"></b>
+                    <b style="--r:135deg;--l:calc(var(--wp-s)*1.2);--w:max(1px,calc(var(--wp-s)*.03));--o:.6"></b>
+                  </i>
+                </span>
+              </div>
+            </div>
+
+            <h1 class="wp-hero__title" id="wp-title" data-reveal="mask" data-reveal-delay="1">Tu conexión perfecta</h1>
+            <p class="wp-hero__sub" id="wp-sub" data-reveal>Llevamos la fibra hasta adentro de tu casa, no hasta el
+              poste de la esquina. Y si algo falla, contestamos el teléfono.</p>
+
+            <div class="wp-hero__actions" data-reveal>
+              <a class="wp-cta" id="wp-cta-primary" href="#contacto">
+                Contratar ahora
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h13M13 6l6 6-6 6"></path>
+                </svg>
+              </a>
+              <a class="wp-cta wp-cta--ghost" id="wp-cta-secondary" href="#plans">Ver planes</a>
+            </div>
+          </div>
+
+          <!-- Columna Derecha: Contenedor Multimedia y Carrusel -->
+          <div class="wp-hero__media" id="wp-hero-media" data-reveal="right" data-reveal-delay="1">
+            <div id="wp-loading" role="status" aria-live="polite">
+              <div class="wp-skeleton">
+                <div class="wp-skeleton__card wp-skeleton__card--side"></div>
+                <div class="wp-skeleton__card wp-skeleton__card--main"></div>
+                <div class="wp-skeleton__card wp-skeleton__card--side"></div>
+              </div>
+              <span class="wp-sr-only">Cargando promociones</span>
+            </div>
+
+            <div class="wp-state" id="wp-error" role="alert" hidden>
+              <p class="wp-state__title">No cargaron las promociones</p>
+              <p class="wp-state__text" id="wp-error-text"></p>
+              <button class="wp-state__retry" id="wp-retry" type="button">Reintentar</button>
+            </div>
+
+            <div class="wp-state wp-state--empty" id="wp-empty" hidden>
+              <p class="wp-state__title">Sin promociones activas</p>
+              <p class="wp-state__text">Cuando cargues anuncios en el CMS aparecerán aquí.</p>
+            </div>
+
+            <div class="wp-carousel" id="wp-carousel" hidden>
+              <div class="wp-stage" id="wp-stage" role="group" aria-roledescription="carrusel"
+                aria-label="Promociones y anuncios" tabindex="0"></div>
+              <div class="wp-controls" id="wp-controls">
+                <p class="wp-drag" id="wp-drag">
+                  <span class="wp-drag__scene" aria-hidden="true">
+                    <svg class="wp-drag__arrow is-left" viewBox="0 0 24 24" width="12" height="12" fill="none"
+                      stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M15 6l-6 6 6 6" />
+                    </svg>
+                    <svg class="wp-drag__hand" viewBox="0 0 24 24" width="22" height="22" fill="none"
+                      stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                      <path
+                        d="M9 11V5.5a1.5 1.5 0 0 1 3 0V11m0-1.5a1.5 1.5 0 0 1 3 0V11m0-1a1.5 1.5 0 0 1 3 0v4.5a6 6 0 0 1-6 6h-1a5 5 0 0 1-4.4-2.6L5 15a1.6 1.6 0 0 1 2.6-1.8L9 14.5" />
+                    </svg>
+                    <svg class="wp-drag__arrow is-right" viewBox="0 0 24 24" width="12" height="12" fill="none"
+                      stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M9 6l6 6-6 6" />
+                    </svg>
+                  </span>
+                  <span class="wp-drag__label">Arrastra para ver las promociones</span>
+                </p>
+                <div class="wp-dots" id="wp-dots" role="tablist" aria-label="Ir a promoción"></div>
+                <button class="wp-ctrl wp-ctrl--play" id="wp-play" type="button"
+                  aria-label="Pausar reproducción automática">❚❚</button>
+              </div>
+            </div>
+          </div>
+
+        </section>
+      </div>
+    </main>
   </div>
 
   <!-- Botón Flotante WhatsApp (FAB) -->
@@ -191,6 +326,7 @@
      ========================================================================== -->
   <script src="src/core/canvas.js"></script>
   <script type="module" src="src/components/navbar/navbar.js"></script>
+  <script type="module" src="src/main.js?v=20260926l"></script>
 </body>
 
 </html>
